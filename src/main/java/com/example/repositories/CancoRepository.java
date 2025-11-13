@@ -13,6 +13,9 @@ public interface CancoRepository extends JpaRepository<Canco, Long> {
 
 	List<Canco> findByGenere(Genere genere);
 
-	List<Canco> findByDisponibleFalse();
+    //  Amb @Query podem fer consultes JPQL personalitzades
+    //    @Query("SELECT e FROM Estudiant e WHERE e.edat BETWEEN :edatMin AND :edatMax")
+    //    List<Estudiant> trobarPerRangEdat(@Param("edatMin") Integer min,
+    //                                      @Param("edatMax") Integer max);
 
 }

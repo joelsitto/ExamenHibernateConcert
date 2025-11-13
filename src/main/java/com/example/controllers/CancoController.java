@@ -42,22 +42,22 @@ public class CancoController {
 		int eliminades = 0;
 		List<Artista> artistesAfectats = new ArrayList<>();
 
-		for (Canco c : cancons) {
+		for (Canco canco : cancons) {
 			double suma = 0;
 
-			if (c.getInstruments() != null && !c.getInstruments().isEmpty()) {
-				for (Instrument ins : c.getInstruments()) {
+			if (canco.getInstruments() != null && !canco.getInstruments().isEmpty()) {
+				for (Instrument ins : canco.getInstruments()) {
 					suma += ins.getPopularitat();
 				}
 			}
 			
-			suma /= c.getInstruments().size();
+			suma /= canco.getInstruments().size();
 
 			if (suma < 3.0) {
-				c.setDisponible(false);
-				cancoRepo.save(c);
+				canco.setDisponible(false);
+				cancoRepo.save(canco);
 
-				Artista artista = c.getArtista();
+				Artista artista = canco.getArtista();
 				if (artista != null) {
 					artista.setCache(artista.getCache() - 10.0);
 					artistaRepo.save(artista);
