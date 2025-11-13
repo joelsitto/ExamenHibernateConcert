@@ -1,5 +1,6 @@
 package hibernateDAO;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import com.example.model.*;
@@ -14,19 +15,21 @@ public class CancoDAO extends GenericDAO<Canco> {
 
 	public void afegirInstrumentPerGenere(SessionFactory factory, Genere genere, Instrument instrument) {
 		factory.getCurrentSession().beginTransaction();
-		List<Canco> cancons = factory.getCurrentSession().createQuery("from Canco where genere=:genere", Canco.class)
-				.setParameter("genere", genere).getResultList();
-		factory.getCurrentSession().getTransaction().commit();
+        Session session = factory.getCurrentSession();
 
-		for (Canco c : cancons) {
-			c.getInstruments().add(instrument);
-			instrument.getCancons().add(c);
-			factory.getCurrentSession().beginTransaction();
-			factory.getCurrentSession().merge(instrument);
-			factory.getCurrentSession().getTransaction().commit();
-			c.setDurada(c.getDurada() + (instrument.getPopularitat() * 0.5));
-			System.out.println("Durada actualitzada per la cançó " + c.getTitol() + ": " + c.getDurada());
-			actualitzar(factory, c);
+
+		List<Canco> cancons = session.createQuery("from Canco where genere = :genere", Canco.class).setParameter("genere", genere).getResultList();
+		session.getTransaction().commit();
+
+		for (Canco canco : cancons) {
+			canco.getInstruments().add(instrument);
+			instrument.getCancons().add(canco);
+            session.beginTransaction();
+            session.merge(instrument);
+            session.getTransaction().commit();
+            canco.setDurada(canco.getDurada() + (instrument.getPopularitat() * 0.5));
+			System.out.println("Durada actualitzada per la cançó " + canco.getTitol() + ": " + canco.getDurada());
+			actualitzar(factory, canco);
 		}
 	}
 }
